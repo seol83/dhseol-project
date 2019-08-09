@@ -78,13 +78,19 @@ const setUrlData = function(id, oUrl, sUrl){
  * @returns {Number} URL json data
  */
 const hash = function(url){
-  //짧은 주소 최대 문자수 8자리 제한을 위해 62^8한 값으로 해쉬 처리.
-  const max = Math.pow(_baseLen, 8);
 
-  let hash = 0;
-  for (let i = 0; i < url.length; i++) hash += url.charCodeAt(i);
+  let mul = 1;
+  let x   = 0;
+  //짧은 주소 최대 문자수 8자리 제한을 위해 62^8한 값보다 작은 수 중 가장 큰 소수 사용.
+  const MOD = 218340105584893;
 
-  return hash % max;
+  for (let i = 0; i < url.length; i++) {
+      x = ((url.charCodeAt(i) * mul) + x) % MOD;
+      mul *= 7;
+  }
+  
+  return x%MOD;
+
 };
 
 let urlShortener = {};
