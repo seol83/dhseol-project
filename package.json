@@ -1,0 +1,15 @@
+{
+  "name": "url-shortener",
+  "version": "1.0.0",
+  "author": "Daehui Seol <seol83@gmail.com>",
+  "dependencies": {
+    "ejs": "~2.4.1",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "mocha": "^6.2.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  }
+}

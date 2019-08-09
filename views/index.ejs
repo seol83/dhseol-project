@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <title>URL Shortener</title>
+    <script type="text/javascript" src="js/jquery-3.4.1.min.js">
+    </script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $("#btnChange").on("click", function(){
+          var orginUrl = encodeURIComponent($("#txtOriginUrl").val());
+
+          if(orginUrl.length <= 0){
+            alert("변환할 주소를 입력해주세요.");
+            return;
+          }
+
+          $.ajax({
+            type : 'GET',
+            url : "/urlShortener/" + orginUrl,
+            success : function(data){
+              var shortUrl = location.protocol + "//" + location.host + "/" + data.shortUrl;
+              $("#txtShortUrl").val(shortUrl);
+            },
+            error : function(){
+              alert("error");
+            }
+          });
+        });
+      });
+
+    </script>
+  </head>
+  <body>
+      <form>
+        URL : <input type="text" id="txtOriginUrl" />
+        short URL : <input type="text" id="txtShortUrl" disabled />
+        <input type="button" id="btnChange" value="변환" />
+      </form>
+  </body>
+</html>
