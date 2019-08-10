@@ -104,6 +104,7 @@
 ### 실행방법
 1. nodejs 설치
   - version : 10.16.2 이상
+  https://nodejs.org/ko/
 
 2. 서버 실행
   - 소스를 받아 압축을 풀고 server.js 파일이 있는 폴더에서 다음 명령어 실행.
