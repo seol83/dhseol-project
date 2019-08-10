@@ -11,7 +11,7 @@
           var orginUrl = encodeURIComponent($("#txtOriginUrl").val());
 
           if(orginUrl.length <= 0){
-            alert("변환할 주소를 입력해주세요.");
+            alert("변환할 URL를 입력해주세요.");
             return;
           }
 
@@ -31,11 +31,35 @@
 
     </script>
   </head>
-  <body>
-      <form>
-        URL : <input type="text" id="txtOriginUrl" />
-        short URL : <input type="text" id="txtShortUrl" disabled />
-        <input type="button" id="btnChange" value="변환" />
-      </form>
+  <body>      
+    <table>
+        <tr>
+            <td>
+                URL
+            <td>
+            <td>
+                <textarea id="txtOriginUrl" style="width:300px;" rows="4" placeholder="원본 URL" ></textarea>
+            </td>
+            <td>
+                <input type="button" id="btnChange" value="URL 변환" />
+            </td>
+            <td>
+                short URL
+            <td>
+            <td>
+                <input type="text" id="txtShortUrl" style="width:200px;" placeholder="줄어든 URL" disabled />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5">
+                <ul>
+                    <li>URL에 단축하려는 URL을 입력하고 [URL 변환] 버튼을 클릭하면 short URL에 단축된 URL이 표시됩니다.</li>
+                    <li>URL을 입력하실때에는 프로토콜(http, https 등)까지 입력하여주세요.</li>
+                    <li>단축 URL 정보를 db에 저장하지 않으므로 서버를 재구동하면 다시 등록하여야 합니다.</li>
+                    <li>원본 URL이 같으면 서버를 재구동하여도 항상 같은 단축URL을 표시합니다.</li>
+                </ul>
+            </td>
+        </tr>
+    </table>
   </body>
 </html>

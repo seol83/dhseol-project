@@ -3,11 +3,11 @@
  * @module urlShortener
  */
 
-const _baseCode = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-const _baseLen  = _baseCode.length;
+const BASE_CODE = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+const BASE_LEN  = BASE_CODE.length;
+const ERROR_NOT_REGISTERED = "ERROR_NOT_REGISTERED";
 
 let _urlList = {};
-let _urlIndex = {};
 
 /**
  * URL의 고유한 id를 62진법으로 변환하여 해당하는 문자를 리턴한다.
@@ -16,13 +16,13 @@ let _urlIndex = {};
  * @returns {string} 62진법으로 변환한 문자열
  */
 const encId = function(id){
-  let value = Math.floor(id/_baseLen);
-  let rest  = Math.floor(id%_baseLen);
+  let value = Math.floor(id/BASE_LEN);
+  let rest  = Math.floor(id%BASE_LEN);
 
   if(value == 0){
-    return _baseCode.charAt(rest);
+    return BASE_CODE.charAt(rest);
   }else{
-    return _baseCode.charAt(rest) + encId(value);
+    return BASE_CODE.charAt(rest) + encId(value);
   }
 }
 
@@ -35,7 +35,7 @@ const encId = function(id){
 const decId = function(str){
   let result = 0;
   for(let i=0; i<str.length; i++){
-    result += _baseCode.indexOf(str.charAt(i)) * Math.pow(_baseLen, i);
+    result += BASE_CODE.indexOf(str.charAt(i)) * Math.pow(BASE_LEN, i);
   }
   return result;
 }
@@ -50,15 +50,6 @@ const getUrlData = function(){
 }
 
 /**
- * 짧은 URL을 key로 하고 원본 URL을 Value로 가지고 있는 json data를 리턴한다.
- * @method getUrlIndex
- * @returns {Number} URL json data
- */
-const getUrlIndex = function(){
-  return _urlIndex;
-}
-
-/**
  * URL id, 원본 URL, 짧은 URL 정보를 json data에 저장한다.
  * @method setUrlData
  * @param {Number} id URL의 고유한 ID
@@ -67,9 +58,8 @@ const getUrlIndex = function(){
  */
 const setUrlData = function(id, oUrl, sUrl){
   _urlList[id] = {oUrl : oUrl, sUrl : sUrl};
-  _urlIndex[sUrl] = oUrl;
-  //console.log(_urlList);
-  //console.log(_urlIndex);
+  
+  console.debug("Set URL DATA>", id, {oUrl : oUrl, sUrl : sUrl});
 }
 
 /**
@@ -82,11 +72,12 @@ const hash = function(url){
   let mul = 1;
   let x   = 0;
   //짧은 주소 최대 문자수 8자리 제한을 위해 62^8한 값보다 작은 수 중 가장 큰 소수 사용.
-  const MOD = 218340105584893;
+  const MOD = 218340105584893; 
 
   for (let i = 0; i < url.length; i++) {
+      
       x = ((url.charCodeAt(i) * mul) + x) % MOD;
-      mul *= 7;
+      mul = (mul * 3) % MOD;
   }
   
   return x%MOD;
@@ -94,7 +85,6 @@ const hash = function(url){
 };
 
 let urlShortener = {};
-
 
 /**
  * URL을 받아 해당하는 짧은 URL을 리턴한다.
@@ -106,7 +96,7 @@ let urlShortener = {};
 urlShortener.getShortUrl = function(originUrl){
   let index   = hash(originUrl);
   let urlList = getUrlData();
-
+  
   if(urlList.hasOwnProperty(index)){
     return urlList[index].sUrl;
   }else{
@@ -126,8 +116,16 @@ urlShortener.getShortUrl = function(originUrl){
  * @returns {String} 원본 URL
  */
 urlShortener.getOriginUrl = function(shortUrl){
-  let urlIndex = getUrlIndex();
-  return urlIndex[shortUrl];
+  let index = decId(shortUrl).toString();
+  let urlList = getUrlData();
+  
+  if(urlList[index] != undefined){      
+    console.log("Get URL DATA >", index, urlList[index]);
+    return urlList[index].oUrl;
+  }else{
+    console.log("URL not registered", shortUrl);  
+    return ERROR_NOT_REGISTERED;
+  }
 }
 
 module.exports = urlShortener;

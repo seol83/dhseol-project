@@ -16,7 +16,13 @@ module.exports = function(app, urlShortener)
   app.get('/:shortUrl', function(req, res){
     let shortUrl = req.params.shortUrl;
     let originUrl = urlShortener.getOriginUrl(shortUrl);
-
-    res.redirect(301, originUrl);
+    
+    switch(originUrl){
+        case 'ERROR_NOT_REGISTERED':
+            res.redirect(301, '/');
+        break;
+        default :
+            res.redirect(301, originUrl);
+    }
   });
 }
