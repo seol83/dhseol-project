@@ -4,7 +4,7 @@
   "author": "Daehui Seol <seol83@gmail.com>",
   "dependencies": {
     "ejs": "~2.4.1",
-    "express": "^4.17.1"
+    "express": "^4.17.3"
   },
   "devDependencies": {
     "mocha": "^6.2.0"
